@@ -28,5 +28,8 @@ RUN cd pico-sdk && git submodule update --init
 
 ENV PICO_SDK_PATH=/opt/pico-sdk
 
+USER root
+
 # Ready to build stuff
 CMD /bin/bash
+
