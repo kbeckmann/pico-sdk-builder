@@ -1,8 +1,6 @@
-# kbeckmann/pico-sdk-builder: Build machine running archlinux for building Raspberry Pi Pico SDK based projects
+# kbeckmann/pico-sdk-builder: Build machine running ubuntu 24.04 for building Raspberry Pi Pico SDK based projects
 
-This is a simple Docker environment for building packages in an Archlinux environment.
-
-`yay` will be installed as well.
+This is a simple Docker environment for building packages in an ubuntu 24.04 environment.
 
 ## Example building PicoCart64
 ```bash
@@ -18,7 +16,7 @@ wget https://github.com/meeq/FlappyBird-N64/raw/master/FlappyBird-v1.4.z64
 docker run \
     --mount type=bind,source=$(pwd),target=/ci \
     --workdir=/ci \
-    ghcr.io/kbeckmann/pico-sdk-builder:latest \
+    ghcr.io/kbeckmann/pico-sdk-builder:ubuntu-24.04 \
     bash -c "\
         git config --global --add safe.directory /ci                     && \
         mkdir -p sw/build                                                && \

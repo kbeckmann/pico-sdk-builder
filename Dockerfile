@@ -1,35 +1,20 @@
-FROM archlinux/archlinux
+FROM ubuntu:24.04
 
+# Set the working directory
 WORKDIR /opt
 
-RUN echo 'Server = http://mirror.one.com/archlinux/$repo/os/$arch' > /etc/pacman.d/mirrorlist && \
-    yes | pacman -Syyu && \
-    pacman --noconfirm -S base-devel wget sudo vi && \
-    useradd -m docker && echo "docker:docker" | chpasswd && \
-    chown docker:docker /opt && \
-    echo "docker ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
-    sudo -u docker bash -c "\
-        wget https://aur.archlinux.org/cgit/aur.git/snapshot/yay-bin.tar.gz && \
-        tar xf yay-bin.tar.gz && \
-        (cd yay-bin && yes | makepkg -s --skippgpcheck) && \
-        (cd yay-bin && sudo pacman --noconfirm -U *.pkg.tar*) \
-    "
-
-USER docker
-
-RUN yay --noconfirm -S arm-none-eabi-gcc arm-none-eabi-binutils arm-none-eabi-newlib
-RUN yay --noconfirm -S cmake python3
+# Install necessary packages and clean up afterwards
+RUN apt update && \
+    apt -y upgrade && \
+    apt install -y cmake python3 git gcc-arm-none-eabi binutils-arm-none-eabi libnewlib-arm-none-eabi && \
+    rm -rf /var/lib/apt/lists/*
 
 # Download the pico-sdk
-RUN git clone https://github.com/raspberrypi/pico-sdk
+RUN git clone --depth 1 https://github.com/raspberrypi/pico-sdk && \
+    cd pico-sdk && git submodule update --init
 
-# We could use --recurse-submodules above, but we don't need _all_ the nested submodules
-RUN cd pico-sdk && git submodule update --init
-
+# Set environment variable for the pico-sdk path
 ENV PICO_SDK_PATH=/opt/pico-sdk
 
-USER root
-
-# Ready to build stuff
-CMD /bin/bash
-
+# Default command
+CMD ["/bin/bash"]
