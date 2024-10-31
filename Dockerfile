@@ -6,7 +6,7 @@ WORKDIR /opt
 # Install necessary packages and clean up afterwards
 RUN apt update && \
     apt -y upgrade && \
-    apt install -y cmake python3 git gcc-arm-none-eabi binutils-arm-none-eabi libnewlib-arm-none-eabi && \
+    apt install -y cmake python3 git g++ build-essential gcc-arm-none-eabi binutils-arm-none-eabi libnewlib-arm-none-eabi && \
     rm -rf /var/lib/apt/lists/*
 
 # Download the pico-sdk
