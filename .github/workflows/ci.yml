@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - latest
+      - ubuntu-24.04
   schedule:
     - cron: "0 2 * * *"
 
